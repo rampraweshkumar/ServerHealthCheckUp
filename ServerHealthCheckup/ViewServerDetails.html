@@ -1,0 +1,102 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>Server Health Checkup Report</title>
+    <style>
+        #serverTable td {
+            border: 1px solid grey;
+        }
+        #serverTable th {
+            border: 1px solid grey;
+        }
+        /*Style added to show the actual structure of table*/
+    </style>
+    <script src="Scripts/jquery-3.4.1.js"></script>
+    <script type="text/javascript">
+        function FetchAll() {
+            $.ajax({
+                method: "POST",
+                url: "ServerHealthCheckup.asmx/GetAll",
+                data: "{}",
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                async: true,
+                success: function (data) {
+                    var jsonObject = data.d;
+                    var strHTML = '<tr><th>Server IP</th><th>Server Name</th><th>Region</th><th>Status</th></tr>';
+                    $(jsonObject).each(function () {
+                        var row = $(this)[0];
+                        strHTML += '<tr><td>' + row["IP"] + '</td><td>' + row["Name"] + '</td><td>' + row["Region"] + '</td><td>' + row["Status"] + '</td></tr>';
+                    });
+                    $('#serverTable').html(strHTML);
+                },
+                error: function () {
+                    alert('some error occured')
+                }
+            });
+        }
+
+        function FetchIpDetails() {
+            var Ip = $("#txtIp").val();
+            $.ajax({
+                method: "POST",
+                url: "ServerHealthCheckup.asmx/GetServerIpDetails",
+                data: "{'ip',Ip}",
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                async: true,
+                success: function (data) {
+                    var jsonObject = data.d;
+                    var strHTML = '<tr><th>Server IP</th><th>Server Name</th><th>Region</th><th>Status</th></tr>';
+                    $(jsonObject).each(function () {
+                        var row = $(this)[0];
+                        strHTML += '<tr><td>' + row["IP"] + '</td><td>' + row["Name"] + '</td><td>' + row["Region"] + '</td><td>' + row["Status"] + '</td></tr>';
+                    });
+                    $('#serverTable').html(strHTML);
+                },
+                error: function () {
+                    alert('some error occured')
+                }
+            });
+        }
+
+        function FetchNameDetails() {
+            var Name = $("#txtName").val();
+            $.ajax({
+                method: "POST",
+                url: "ServerHealthCheckup.asmx/GetServerNameDetails",
+                data: '{"name":'+Name+'}',
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                async: true,
+                success: function (data) {
+                    var jsonObject = data.d;
+                    var strHTML = '<tr><th>Server IP</th><th>Server Name</th><th>Region</th><th>Status</th></tr>';
+                    $(jsonObject).each(function () {
+                        var row = $(this)[0];
+                        strHTML += '<tr><td>' + row["IP"] + '</td><td>' + row["Name"] + '</td><td>' + row["Region"] + '</td><td>' + row["Status"] + '</td></tr>';
+                    });
+                    $('#serverTable').html(strHTML);
+                },
+                error: function () {
+                    alert('some error occured')
+                }
+            });
+        }
+    </script>
+</head>
+<body>
+    <form id="from1" runat="server">
+        <h1>Server Health Checkup</h1>
+        <button id="btnFetchAll" onclick="FetchAll();return false;">ShowAll</button>
+        <input id="txtIp" type="text"/>
+        <button id=" btnFechIPDetails" onclick="FetchIpDetails(); return false;">SearchByIp</button>
+        <input id="txtName" type="text"/>
+        <button id="btnFetchNameDEtails" onclick="FetchNameDetails(); return false;">SearchByName</button>
+        <div>
+            <table id="serverTable"></table>
+        </div>
+    </form>
+</body>
+</html>
