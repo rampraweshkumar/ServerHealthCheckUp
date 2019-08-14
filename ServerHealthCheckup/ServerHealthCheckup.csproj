@@ -100,6 +100,7 @@
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ServerDetails.cs" />
+    <Compile Include="ServerDetailsConstants.cs" />
     <Compile Include="ServerHealthCheckup.asmx.cs">
       <DependentUpon>ServerHealthCheckup.asmx</DependentUpon>
       <SubType>Component</SubType>

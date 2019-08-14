@@ -1,11 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-using System.Web.Services;
-using System.Data;
 using System.Configuration;
+using System.Data;
 using System.Data.SqlClient;
+using System.Web.Services;
 
 
 namespace WebApplication1
@@ -23,19 +21,13 @@ namespace WebApplication1
         List<ServerDetails> serverDetails = new List<ServerDetails>();
 
         [WebMethod]
-        public string HelloWorld()
-        {
-            return "Hello World";
-        }
-
-        [WebMethod]
         public IEnumerable<ServerDetails> GetAll()
         {
             serverDetails.Clear();
-            string constr = ConfigurationManager.ConnectionStrings["ServerManagement"].ConnectionString;
+            string constr = ConfigurationManager.ConnectionStrings[ServerDetailsConstants.ConstrName].ConnectionString;
             using (SqlConnection con = new SqlConnection(constr))
             {
-                using (SqlCommand cmd = new SqlCommand("SELECT * FROM ServerDetails"))
+                using (SqlCommand cmd = new SqlCommand(ServerDetailsConstants.SelectAllQuery))
                 {
                     using (SqlDataAdapter sda = new SqlDataAdapter())
                     {
@@ -43,16 +35,16 @@ namespace WebApplication1
                         sda.SelectCommand = cmd;
                         using (DataTable dt = new DataTable())
                         {
-                            dt.TableName = "ServerDetails";
+                            dt.TableName = ServerDetailsConstants.ServerTable;
                             sda.Fill(dt);
                            foreach(DataRow dr in dt.Rows)
                             {
                                 serverDetails.Add(new ServerDetails
                                 {
-                                    IP = dr["IP"].ToString(),
-                                    Name = dr["Name"].ToString(),
-                                    Region = dr["Region"].ToString(),
-                                    Status = Convert.ToUInt16(dr["Status"])
+                                    IP = dr[ServerDetailsConstants.IpField].ToString(),
+                                    Name = dr[ServerDetailsConstants.NameField].ToString(),
+                                    Region = dr[ServerDetailsConstants.RegionField].ToString(),
+                                    Status = Convert.ToUInt16(dr[ServerDetailsConstants.StatusField])
                                 });
                             }
                             return serverDetails;
@@ -66,10 +58,10 @@ namespace WebApplication1
         public IEnumerable<ServerDetails> GetServerIpDetails(string ip)
         {
             serverDetails.Clear();
-            string constr = ConfigurationManager.ConnectionStrings["ServerManagement"].ConnectionString;
+            string constr = ConfigurationManager.ConnectionStrings[ServerDetailsConstants.ConstrName].ConnectionString;
             using (SqlConnection con = new SqlConnection(constr))
             {
-                using (SqlCommand cmd = new SqlCommand("SELECT * FROM ServerDetails where IP=@Ip"))
+                using (SqlCommand cmd = new SqlCommand(ServerDetailsConstants.GetServerIpDetailsQuery))
                 {
                     using (SqlDataAdapter sda = new SqlDataAdapter())
                     {
@@ -83,17 +75,17 @@ namespace WebApplication1
                         sda.SelectCommand = cmd;
                         using (DataTable dt = new DataTable())
                         {
-                            dt.TableName = "ServerDetails";
+                            dt.TableName = ServerDetailsConstants.ServerTable;
                             
                             sda.Fill(dt);
                             foreach (DataRow dr in dt.Rows)
                             {
                                 serverDetails.Add(new ServerDetails
                                 {
-                                    IP = dr["IP"].ToString(),
-                                    Name = dr["Name"].ToString(),
-                                    Region = dr["Region"].ToString(),
-                                    Status = Convert.ToUInt16(dr["Status"])
+                                    IP = dr[ServerDetailsConstants.IpField].ToString(),
+                                    Name = dr[ServerDetailsConstants.NameField].ToString(),
+                                    Region = dr[ServerDetailsConstants.RegionField].ToString(),
+                                    Status = Convert.ToUInt16(dr[ServerDetailsConstants.StatusField])
                                 });
                             }
                             return serverDetails;
@@ -107,10 +99,10 @@ namespace WebApplication1
         public IEnumerable<ServerDetails> GetServerNameDetails(string name)
         {
             serverDetails.Clear();
-            string constr = ConfigurationManager.ConnectionStrings["ServerManagement"].ConnectionString;
+            string constr = ConfigurationManager.ConnectionStrings[ServerDetailsConstants.ConstrName].ConnectionString;
             using (SqlConnection con = new SqlConnection(constr))
             {
-                using (SqlCommand cmd = new SqlCommand("SELECT * FROM ServerDetails where Name=@Name"))
+                using (SqlCommand cmd = new SqlCommand(ServerDetailsConstants.GetServerNameDetailsQuery))
                 {
                     using (SqlDataAdapter sda = new SqlDataAdapter())
                     {
@@ -124,17 +116,17 @@ namespace WebApplication1
                         sda.SelectCommand = cmd;
                         using (DataTable dt = new DataTable())
                         {
-                            dt.TableName = "ServerDetails";
+                            dt.TableName = ServerDetailsConstants.ServerTable;
 
                             sda.Fill(dt);
                             foreach (DataRow dr in dt.Rows)
                             {
                                 serverDetails.Add(new ServerDetails
                                 {
-                                    IP = dr["IP"].ToString(),
-                                    Name = dr["Name"].ToString(),
-                                    Region = dr["Region"].ToString(),
-                                    Status = Convert.ToUInt16(dr["Status"])
+                                    IP = dr[ServerDetailsConstants.IpField].ToString(),
+                                    Name = dr[ServerDetailsConstants.NameField].ToString(),
+                                    Region = dr[ServerDetailsConstants.RegionField].ToString(),
+                                    Status = Convert.ToUInt16(dr[ServerDetailsConstants.StatusField])
                                 });
                             }
                             return serverDetails;
